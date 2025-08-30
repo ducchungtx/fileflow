@@ -20,8 +20,8 @@ export default function Home() {
             <p className="text-muted-foreground">
               Reduce image file size while maintaining the best quality
             </p>
-            <Button className="mt-4" variant="outline">
-              Try Now
+            <Button className="mt-4" variant="outline" asChild>
+              <a href="/compress">Try Now</a>
             </Button>
           </div>
 

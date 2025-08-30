@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
-  port: process.env.PORT || 5000,
+  port: process.env.PORT || 4000,
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   redis: {
     host: process.env.REDIS_HOST || '127.0.0.1',

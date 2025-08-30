@@ -10,6 +10,15 @@ interface CompressionSettings {
   maxHeight?: number
 }
 
+interface CompressionResult {
+  original: File
+  compressed?: File
+  originalSize?: number
+  compressedSize?: number
+  compressionRatio?: string
+  error?: string
+}
+
 export default function ImageCompressPage() {
   const [files, setFiles] = useState<File[]>([])
   const [settings, setSettings] = useState<CompressionSettings>({
@@ -17,7 +26,7 @@ export default function ImageCompressPage() {
     format: 'auto'
   })
   const [isCompressing, setIsCompressing] = useState(false)
-  const [results, setResults] = useState<any[]>([])
+  const [results, setResults] = useState<CompressionResult[]>([])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles)
@@ -46,7 +55,7 @@ export default function ImageCompressPage() {
         formData.append('image', file)
         formData.append('quality', settings.quality.toString())
         formData.append('format', settings.format)
-        
+
         if (settings.maxWidth) {
           formData.append('maxWidth', settings.maxWidth.toString())
         }
@@ -55,7 +64,7 @@ export default function ImageCompressPage() {
         }
 
         try {
-          const response = await fetch('http://localhost:5000/api/v1/compress/image', {
+          const response = await fetch('http://localhost:4000/api/v1/compress/image', {
             method: 'POST',
             body: formData,
           })
@@ -104,8 +113,8 @@ export default function ImageCompressPage() {
     URL.revokeObjectURL(url)
   }
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes'
+  const formatFileSize = (bytes: number | undefined) => {
+    if (bytes === undefined || bytes === 0) return '0 Bytes'
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
@@ -123,11 +132,10 @@ export default function ImageCompressPage() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div
             {...getRootProps()}
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              isDragActive
-                ? 'border-blue-400 bg-blue-50'
-                : 'border-gray-300 hover:border-gray-400'
-            }`}
+            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${isDragActive
+              ? 'border-blue-400 bg-blue-50'
+              : 'border-gray-300 hover:border-gray-400'
+              }`}
           >
             <input {...getInputProps()} />
             <div className="space-y-2">
@@ -176,7 +184,7 @@ export default function ImageCompressPage() {
         {/* Compression Settings */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">Cài đặt nén</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -187,7 +195,7 @@ export default function ImageCompressPage() {
                 min="10"
                 max="100"
                 value={settings.quality}
-                onChange={(e) => setSettings({...settings, quality: parseInt(e.target.value)})}
+                onChange={(e) => setSettings({ ...settings, quality: parseInt(e.target.value) })}
                 className="w-full"
               />
             </div>
@@ -198,7 +206,7 @@ export default function ImageCompressPage() {
               </label>
               <select
                 value={settings.format}
-                onChange={(e) => setSettings({...settings, format: e.target.value})}
+                onChange={(e) => setSettings({ ...settings, format: e.target.value })}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               >
                 <option value="auto">Tự động (giữ nguyên)</option>
@@ -216,7 +224,7 @@ export default function ImageCompressPage() {
                 type="number"
                 placeholder="Không giới hạn"
                 value={settings.maxWidth || ''}
-                onChange={(e) => setSettings({...settings, maxWidth: e.target.value ? parseInt(e.target.value) : undefined})}
+                onChange={(e) => setSettings({ ...settings, maxWidth: e.target.value ? parseInt(e.target.value) : undefined })}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
             </div>
@@ -229,7 +237,7 @@ export default function ImageCompressPage() {
                 type="number"
                 placeholder="Không giới hạn"
                 value={settings.maxHeight || ''}
-                onChange={(e) => setSettings({...settings, maxHeight: e.target.value ? parseInt(e.target.value) : undefined})}
+                onChange={(e) => setSettings({ ...settings, maxHeight: e.target.value ? parseInt(e.target.value) : undefined })}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
             </div>
@@ -270,7 +278,7 @@ export default function ImageCompressPage() {
                         </div>
                       </div>
                       <button
-                        onClick={() => downloadFile(result.compressed, `compressed_${result.original.name}`)}
+                        onClick={() => result.compressed && downloadFile(result.compressed, `compressed_${result.original.name}`)}
                         className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
                       >
                         Tải xuống
