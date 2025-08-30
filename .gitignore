@@ -106,3 +106,7 @@ Thumbs.db
 # Ignore uploaded files or temp conversions if any
 uploads/
 temp/
+
+# Environment files
+backend/.env
+frontend/.env.local
