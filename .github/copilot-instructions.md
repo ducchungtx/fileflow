@@ -46,6 +46,26 @@ fileflow/
 4. **Production**: Use `npm run build && npm start` for production builds.
 5. **Contributing**: Fork, create feature branches, write tests, submit PRs.
 
+## Git Branching Strategy
+
+- **Main Branches**:
+  - `master`: Production-ready code
+  - `Develop`: Integration branch for development
+- **Supporting Branches**:
+  - `feature/`: New features and non-emergency bug fixes
+  - `hotfix/`: Urgent production fixes
+  - `release/`: Preparation for a new production release
+- **Branch Naming Convention**:
+  - Feature branches: `feature/feature-name`
+  - Hotfix branches: `hotfix/issue-description`
+  - Release branches: `release/vX.Y.Z`
+- **Workflow Rules**:
+  - **Always create new branches from the `Develop` branch**
+  - Pull requests should target the `Develop` branch
+  - Hotfixes for production issues can branch from `master` but must be merged to both `master` and `Develop`
+  - Keep branches focused on a single feature or fix
+  - Delete branches after they've been merged
+
 ## Key Features to Implement/Understand
 
 - **File Conversions**: Office docs to PDF, image formats (JPG/PNG/WEBP), PDF tools (merge/split/compress).

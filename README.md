@@ -103,3 +103,41 @@ If you encounter port conflicts:
 ## 📚 Documentation
 
 See `docs/README.md` for detailed setup instructions.
+
+## 🔄 Git Workflow
+
+This project follows a structured Git workflow:
+
+### Branches
+
+- **master**: Production-ready code
+- **Develop**: Integration branch for development
+- **feature/**: New features and non-emergency bug fixes
+- **hotfix/**: Urgent production fixes
+- **release/**: Preparation for a new production release
+
+### Workflow Guidelines
+
+1. **Always create new branches from the `Develop` branch**
+
+   ```bash
+   git checkout Develop
+   git pull
+   git checkout -b feature/your-feature-name
+   ```
+
+2. Make your changes, commit with descriptive messages
+
+   ```bash
+   git commit -m "feat: add image compression feature"
+   ```
+
+3. Push your branch and create a pull request targeting the `Develop` branch
+
+   ```bash
+   git push -u origin feature/your-feature-name
+   ```
+
+4. After review and approval, the branch will be merged into `Develop`
+
+5. Delete your branch after it has been merged
