@@ -1,29 +1,30 @@
-import type { Metadata } from "next";
-import { ThemeProvider } from '../components/theme-provider';
-import { ThemeToggle } from '../components/theme-toggle';
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
+import Header from '@/components/Header'
 
 export const metadata: Metadata = {
-  title: "FileFlow - Online File Conversion Service",
-  description: "Free online file conversion service with image compression, Word to PDF conversion, and diverse file processing features.",
-};
+  title: 'FileFlow - Dịch vụ Chuyển đổi File Trực tuyến',
+  description: 'Dịch vụ chuyển đổi file trực tuyến nhanh chóng và bảo mật. Hỗ trợ nén ảnh, chuyển đổi văn bản, và nhiều tính năng khác.',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
-        <ThemeProvider>
-          <header className="flex justify-between items-center p-4 bg-background border-b border-border transition-colors">
-            <h1 className="text-xl font-bold text-foreground">FileFlow</h1>
-          </header>
+    <html lang="vi">
+      <body>
+        <Header />
+        <main className="min-h-screen">
           {children}
-          <ThemeToggle />
-        </ThemeProvider>
+        </main>
+        <footer className="bg-gray-800 text-white py-8">
+          <div className="container mx-auto px-4 text-center">
+            <p>&copy; 2024 FileFlow. Tất cả quyền được bảo lưu.</p>
+          </div>
+        </footer>
       </body>
     </html>
-  );
+  )
 }
