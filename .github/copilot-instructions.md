@@ -88,3 +88,7 @@ fileflow/
 - Check logs for errors in conversions.
 
 This instructions file helps Copilot understand the project context for better code suggestions. Update it as the project evolves.
+
+## Note
+
+This project uses English. Do not arbitrarily change the content to Vietnamese.
