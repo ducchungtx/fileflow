@@ -1,49 +1,26 @@
 const express = require('express');
 const multer = require('multer');
+const imageController = require('../controllers/imageController');
+
 const router = express.Router();
 
-// Configure multer for file uploads
+// Configure multer for image uploads
+const storage = multer.memoryStorage();
 const upload = multer({
-  dest: 'uploads/',
+  storage,
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB
+    fileSize: 10 * 1024 * 1024, // 10MB limit
   },
   fileFilter: (req, file, cb) => {
-    // Accept image files
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'), false);
+    // Accept images only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
+      return cb(new Error('Only image files are allowed!'), false);
     }
-  },
-});
-
-// POST /api/v1/compress/image
-router.post('/image', upload.single('file'), (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({
-        error: 'No file uploaded',
-        message: 'Please upload an image file'
-      });
-    }
-
-    // TODO: Implement image compression logic
-    res.json({
-      message: 'Image compression endpoint (not yet implemented)',
-      file: {
-        originalName: req.file.originalname,
-        size: req.file.size,
-        mimeType: req.file.mimetype,
-        path: req.file.path
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: 'Image compression failed',
-      message: error.message
-    });
+    cb(null, true);
   }
 });
+
+// Image compression endpoint
+router.post('/image', upload.single('image'), imageController.compressImage);
 
 module.exports = router;
