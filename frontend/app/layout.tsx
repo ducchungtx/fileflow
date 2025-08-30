@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from '../components/theme-provider';
+import { ThemeToggle } from '../components/theme-toggle';
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FileFlow - Dịch vụ Chuyển đổi File Trực tuyến",
-  description: "Dịch vụ chuyển đổi file trực tuyến miễn phí với các tính năng nén ảnh, chuyển đổi Word sang PDF, và xử lý file đa dạng.",
+  title: "FileFlow - Online File Conversion Service",
+  description: "Free online file conversion service with image compression, Word to PDF conversion, and diverse file processing features.",
 };
 
 export default function RootLayout({
@@ -12,9 +14,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        {children}
+        <ThemeProvider>
+          <header className="flex justify-between items-center p-4 bg-background border-b border-border transition-colors">
+            <h1 className="text-xl font-bold text-foreground">FileFlow</h1>
+          </header>
+          {children}
+          <ThemeToggle />
+        </ThemeProvider>
       </body>
     </html>
   );
