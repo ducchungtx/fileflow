@@ -1,33 +1,52 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
-const compressRoutes = require('./api/compress');
+const config = require('./config');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
+  origin: config.corsOrigin,
+  credentials: true,
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: config.upload.maxFileSize }));
+app.use(express.urlencoded({ extended: true, limit: config.upload.maxFileSize }));
 
-// Routes
-app.use('/api/v1/compress', compressRoutes);
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'FileFlow API is running' });
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'FileFlow Backend API is running',
+    timestamp: new Date().toISOString(),
+  });
 });
 
-// Error handling middleware
+// API Routes
+app.use('/api/v1', require('./api'));
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    error: 'Route not found',
+    path: req.originalUrl,
+  });
+});
+
+// Error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  console.error('Error:', err);
+  res.status(500).json({
+    error: 'Internal server error',
+    message: err.message,
+  });
 });
+
+const PORT = config.port;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 FileFlow Backend API Server is running on port ${PORT}`);
+  console.log(`📍 Health check: http://localhost:${PORT}/health`);
 });
+
+module.exports = app;
