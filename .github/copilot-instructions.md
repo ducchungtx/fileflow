@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-FileFlow is an online file conversion service built to provide a simple, fast, and secure user experience. It integrates a blog about "office application experiences" to attract organic traffic through SEO. This is a monorepo project with backend (backend) and frontend (fileflow-fe) components.
+FileFlow is an online file conversion service built to provide a simple, fast, and secure user experience. It integrates a blog about "office application experiences" to attract organic traffic through SEO. This is a monorepo project with backend (backend) and frontend (frontend) components.
 
 ## Tech Stack
 
@@ -49,7 +49,7 @@ fileflow/
 ## Key Features to Implement/Understand
 
 - **File Conversions**: Office docs to PDF, image formats (JPG/PNG/WEBP), PDF tools (merge/split/compress).
-- **Blog Integration**: Markdown-based blog in `fileflow-fe/posts/`.
+- **Blog Integration**: Markdown-based blog in `frontend/posts/`.
 - **API Endpoints**: Backend handles uploads, queues jobs with BullMQ.
 - **SEO**: Optimize frontend for search engines.
 
