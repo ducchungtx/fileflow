@@ -28,10 +28,10 @@ export default function CompressPage() {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setError(null);
     setResult(null);
-    
+
     const selectedFile = acceptedFiles[0];
     if (!selectedFile) return;
-    
+
     // Create a preview URL
     const previewUrl = URL.createObjectURL(selectedFile);
     setFile(selectedFile);
@@ -51,26 +51,26 @@ export default function CompressPage() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!file) {
       setError('Please select an image file first');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Call the API to compress the image
       const response = await compressImage(file, {
         quality: quality,
         format: format
       });
-      
+
       // Create a download URL from the response blob
       const blob = await response.blob();
       const downloadUrl = URL.createObjectURL(blob);
-      
+
       // Show the compressed result
       setResult({
         url: downloadUrl,
@@ -79,7 +79,7 @@ export default function CompressPage() {
         compressionRatio: Math.round((1 - (blob.size / file.size)) * 100),
         name: `compressed_${file.name}`
       });
-      
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to compress the image');
       console.error('Compression error:', err);
@@ -105,23 +105,23 @@ export default function CompressPage() {
       </p>
 
       <div className="bg-card border border-border rounded-lg p-6 shadow-sm">
-        <div 
-          {...getRootProps()} 
+        <div
+          {...getRootProps()}
           className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
             ${isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/20 hover:border-primary/50'}
             ${file ? 'bg-muted/20' : ''}
           `}
         >
           <input {...getInputProps()} />
-          
+
           {preview ? (
             <div className="flex flex-col items-center">
               <div className="relative w-full max-w-xs h-64 mb-4">
-                <Image 
-                  src={preview} 
-                  alt="Preview" 
+                <Image
+                  src={preview}
+                  alt="Preview"
                   fill
-                  className="object-contain rounded" 
+                  className="object-contain rounded"
                 />
               </div>
               <p className="text-sm text-muted-foreground">
@@ -164,7 +164,7 @@ export default function CompressPage() {
                 Lower quality = smaller file size
               </p>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium mb-2" htmlFor="format">
                 Output Format
@@ -182,15 +182,15 @@ export default function CompressPage() {
               </select>
             </div>
           </div>
-          
+
           {error && (
             <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-md">
               {error}
             </div>
           )}
-          
-          <Button 
-            type="submit" 
+
+          <Button
+            type="submit"
             className="w-full"
             disabled={!file || loading}
             variant="default"
@@ -203,19 +203,19 @@ export default function CompressPage() {
       {result && (
         <div className="mt-8 bg-card border border-border rounded-lg p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4">Compression Results</h2>
-          
+
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-full md:w-1/2 relative min-h-60">
               <div className="relative w-full h-60">
-                <Image 
-                  src={result.url} 
-                  alt="Compressed" 
+                <Image
+                  src={result.url}
+                  alt="Compressed"
                   fill
-                  className="object-contain rounded" 
+                  className="object-contain rounded"
                 />
               </div>
             </div>
-            
+
             <div className="w-full md:w-1/2">
               <ul className="space-y-3">
                 <li className="flex justify-between">
@@ -231,7 +231,7 @@ export default function CompressPage() {
                   <span className="font-medium text-primary">{result.compressionRatio}%</span>
                 </li>
               </ul>
-              
+
               <Button asChild className="w-full mt-4" variant="outline">
                 <a href={result.url} download={result.name}>
                   Download
